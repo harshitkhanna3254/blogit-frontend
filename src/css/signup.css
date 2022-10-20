@@ -1,0 +1,22 @@
+.paper {
+  padding: 20px;
+  height: 85vh;
+  width: 420px;
+  margin: 20px auto;
+}
+
+.avatar {
+  background-color: #1bbd7e !important;
+}
+
+.margin_small {
+  margin-bottom: 5px !important;
+}
+
+.margin_medium {
+  margin-bottom: 15px !important;
+}
+
+.margin_large {
+  margin-bottom: 25px !important;
+}

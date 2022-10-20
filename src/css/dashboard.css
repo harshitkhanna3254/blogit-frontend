@@ -1,0 +1,59 @@
+.top_container {
+  max-width: 99%;
+  justify-content: center;
+}
+
+.bottom_container {
+  max-width: 99%;
+  justify-content: center;
+  height: auto;
+}
+
+.center {
+  /* justify-content: center; */
+}
+
+.friends_grid,
+.friends_items {
+  width: 25rem;
+}
+
+/* .paper_status {
+  padding: 20px;
+  height: 25vh;
+  width: 25rem;
+  margin-top: 10px;
+} */
+
+.status_button {
+  height: 50px;
+  margin-top: 10px;
+}
+
+/* .paper_post {
+  padding: 20px;
+  height: 25vh;
+  width: 70vw;
+  margin-top: 10px;
+} */
+
+.width_medium {
+  width: 70%;
+}
+
+.post_container_1 {
+  height: 70%;
+}
+
+.post_container_2 {
+  height: 30%;
+}
+
+.post_image {
+  height: 80%;
+}
+
+.post_textfield {
+  width: 80%;
+  height: 100%;
+}
