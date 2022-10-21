@@ -31,7 +31,7 @@ const Friends = () => {
         <Typography
           align="center"
           mt={1}
-          mb={1}
+          mb={2}
           gutterBottom
           variant="h5"
           component="div"

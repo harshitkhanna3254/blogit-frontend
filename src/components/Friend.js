@@ -20,7 +20,12 @@ const Friend = ({ name, status }) => {
             image={`https://picsum.photos/id/${getRandomInt(1, 255)}/200/300`}
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography
+              align="center"
+              gutterBottom
+              variant="h5"
+              component="div"
+            >
               {name}
             </Typography>
             <Typography variant="body2" color="text.secondary">

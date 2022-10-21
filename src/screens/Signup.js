@@ -1,3 +1,5 @@
+import Navbar from "../components/Navbar";
+
 import {
   Grid,
   Paper,
@@ -50,131 +52,139 @@ const Signup = () => {
   };
 
   return (
-    <Grid container>
-      <Paper className="paper" elevation={3}>
-        <Grid align="center">
-          <Avatar className="avatar">
-            <AddBoxIcon></AddBoxIcon>
-          </Avatar>
-          <h2 className="margin_large">Register</h2>
-        </Grid>
+    <>
+      <Navbar />
+      <Grid container>
+        <Paper className="paper" elevation={3}>
+          <Grid align="center">
+            <Avatar className="avatar">
+              <AddBoxIcon></AddBoxIcon>
+            </Avatar>
+            <h2 className="margin_large">Register</h2>
+          </Grid>
 
-        <Formik
-          initialValues={formInitialValues}
-          validationSchema={formValidationSchema}
-          onSubmit={submitForm}
-        >
-          {(props) => (
-            <Form>
-              <Field
-                as={TextField}
-                name="name"
-                label="Name"
-                placeholder="Enter Name"
-                type="text"
-                className="margin_medium"
-                helperText={<ErrorMessage name="name" />}
-                fullWidth
-                required
-              />
-
-              <Field
-                as={TextField}
-                name="email"
-                label="Email"
-                placeholder="Enter Email"
-                type="email"
-                className="margin_medium"
-                fullWidth
-                required
-              />
-
-              <FormGroup className="margin_medium">
-                <FormLabel id="demo-radio-buttons-group-label">
-                  Gender
-                </FormLabel>
+          <Formik
+            initialValues={formInitialValues}
+            validationSchema={formValidationSchema}
+            onSubmit={submitForm}
+          >
+            {(props) => (
+              <Form>
+                <Field
+                  as={TextField}
+                  name="name"
+                  label="Name"
+                  placeholder="Enter Name"
+                  type="text"
+                  className="margin_medium"
+                  helperText={<ErrorMessage name="name" />}
+                  fullWidth
+                  required
+                />
 
                 <Field
-                  as={RadioGroup}
-                  row
-                  name="gender"
-                  aria-labelledby="gender-label-radio"
-                  defaultValue="male"
+                  as={TextField}
+                  name="email"
+                  label="Email"
+                  placeholder="Enter Email"
+                  type="email"
+                  className="margin_medium"
+                  fullWidth
+                  required
+                />
+
+                <FormGroup className="margin_medium">
+                  <FormLabel id="demo-radio-buttons-group-label">
+                    Gender
+                  </FormLabel>
+
+                  <Field
+                    as={RadioGroup}
+                    row
+                    name="gender"
+                    aria-labelledby="gender-label-radio"
+                    defaultValue="male"
+                  >
+                    <FormControlLabel
+                      value="female"
+                      control={<Radio required />}
+                      label="Female"
+                    />
+                    <FormControlLabel
+                      value="male"
+                      control={<Radio required />}
+                      label="Male"
+                    />
+                    <FormControlLabel
+                      value="other"
+                      control={<Radio required />}
+                      label="Other"
+                    />
+                  </Field>
+                </FormGroup>
+
+                <Field
+                  as={TextField}
+                  name="phoneNumber"
+                  label="Phone Number"
+                  placeholder="Enter Phone Number"
+                  helperText={<ErrorMessage name="phoneNumber" />}
+                  className="margin_medium"
+                  type="number"
+                  fullWidth
+                  required
+                />
+
+                <Field
+                  as={TextField}
+                  name="password"
+                  label="Password"
+                  placeholder="Enter Password"
+                  className="margin_medium"
+                  helperText={<ErrorMessage name="password" />}
+                  type="password"
+                  fullWidth
+                  required
+                />
+
+                <Field
+                  as={TextField}
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  className="margin_medium"
+                  helperText={<ErrorMessage name="confirmPassword" />}
+                  type="password"
+                  fullWidth
+                  required
+                />
+
+                <Link
+                  to="/dashboard"
+                  style={{ textDecoration: "none", color: "white" }}
                 >
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio required />}
-                    label="Female"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio required />}
-                    label="Male"
-                  />
-                  <FormControlLabel
-                    value="other"
-                    control={<Radio required />}
-                    label="Other"
-                  />
-                </Field>
-              </FormGroup>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    color="primary"
+                    className="margin_medium"
+                    disabled={props.isSubmitting}
+                    fullWidth
+                  >
+                    {props.isSubmitting ? "Loading" : "Sign up"}
+                  </Button>
+                </Link>
+              </Form>
+            )}
+          </Formik>
 
-              <Field
-                as={TextField}
-                name="phoneNumber"
-                label="Phone Number"
-                placeholder="Enter Phone Number"
-                helperText={<ErrorMessage name="phoneNumber" />}
-                className="margin_medium"
-                type="number"
-                fullWidth
-                required
-              />
-
-              <Field
-                as={TextField}
-                name="password"
-                label="Password"
-                placeholder="Enter Password"
-                className="margin_medium"
-                helperText={<ErrorMessage name="password" />}
-                type="password"
-                fullWidth
-                required
-              />
-
-              <Field
-                as={TextField}
-                name="confirmPassword"
-                label="Confirm Password"
-                placeholder="Confirm Password"
-                className="margin_medium"
-                helperText={<ErrorMessage name="confirmPassword" />}
-                type="password"
-                fullWidth
-                required
-              />
-
-              <Button
-                variant="contained"
-                type="submit"
-                color="primary"
-                className="margin_medium"
-                disabled={props.isSubmitting}
-                fullWidth
-              >
-                {props.isSubmitting ? "Loading" : "Sign up"}
-              </Button>
-            </Form>
-          )}
-        </Formik>
-
-        <Typography variant="body1" gutterBottom>
-          Already have an account?
-          <Link to="/"> Sign In</Link>
-        </Typography>
-      </Paper>
-    </Grid>
+          <Typography variant="body1" gutterBottom>
+            Already have an account?
+            <Link to="/"> Sign In</Link>
+          </Typography>
+        </Paper>
+      </Grid>
+    </>
   );
 };
 

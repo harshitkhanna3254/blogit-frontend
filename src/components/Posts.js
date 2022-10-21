@@ -1,6 +1,6 @@
 import Post from "../components/Post";
 
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getPosts } from "../services/posts";
 
@@ -31,6 +31,21 @@ const Posts = ({ newPost }) => {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
+        <Typography
+          align="center"
+          mt={1}
+          mb={2}
+          gutterBottom
+          variant="h5"
+          component="div"
+          sx={
+            {
+              // color: "success.main",
+            }
+          }
+        >
+          Posts
+        </Typography>
         <Grid container spacing={2}>
           {renderPosts()}
         </Grid>

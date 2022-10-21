@@ -15,7 +15,6 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   elevation: 3,
   textAlign: "center",
-  height: "100%",
   color: theme.palette.text.secondary,
 }));
 
@@ -48,9 +47,9 @@ const Dashboard = () => {
 
       <Grid container mt={1} ml={1} spacing={2} className="bottom_container">
         <Grid item xs={4}>
-          <Paper>
+          <Item>
             <Friends />
-          </Paper>
+          </Item>
         </Grid>
 
         <Grid item xs={8}>
