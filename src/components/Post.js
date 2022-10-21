@@ -1,8 +1,16 @@
-import { Grid, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import * as React from "react";
 
-import "../css/friend.css";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  Grid,
+} from "@mui/material";
 
-const Friend = ({ name, status }) => {
+const Post = ({ id, body }) => {
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -11,7 +19,7 @@ const Friend = ({ name, status }) => {
 
   return (
     <>
-      <Grid item xs={6}>
+      <Grid item xs={4}>
         <Card sx={{ maxWidth: 345 }}>
           <CardMedia
             component="img"
@@ -21,16 +29,22 @@ const Friend = ({ name, status }) => {
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {name}
+              {id}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {status}
+              {body}
             </Typography>
           </CardContent>
+          <CardActions>
+            <Button size="small" color="warning">
+              Edit
+            </Button>
+            <Button size="small">Comment</Button>
+          </CardActions>
         </Card>
       </Grid>
     </>
   );
 };
 
-export default Friend;
+export default Post;
