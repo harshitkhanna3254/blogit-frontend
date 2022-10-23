@@ -1,7 +1,11 @@
 import axios from "axios";
 
-export const getUsers = (start, end) => {
-  return axios.get(
-    `https://jsonplaceholder.typicode.com/users?_start=${start}&_limit=${end}`
-  );
+export const getUsers = () => {
+  // console.log(`Start = ${start} and end = ${end}`);
+  return axios.get(`https://jsonplaceholder.typicode.com/users`);
+};
+
+export const getAllUsers = () => {
+  // console.log(`Start = ${start} and end = ${end}`);
+  return axios.get(`https://jsonplaceholder.typicode.com/users`);
 };

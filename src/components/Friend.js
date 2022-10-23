@@ -1,8 +1,16 @@
-import { Grid, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  CardActions,
+  Button,
+} from "@mui/material";
 
 import "../css/friend.css";
 
-const Friend = ({ name, status }) => {
+const Friend = ({ name, id, unfollowFriend }) => {
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -28,10 +36,19 @@ const Friend = ({ name, status }) => {
             >
               {name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {status}
-            </Typography>
           </CardContent>
+          <CardActions>
+            <Button
+              size="small"
+              color="warning"
+              onClick={() => {
+                unfollowFriend(id);
+              }}
+            >
+              Unfollow
+            </Button>
+            <Button size="small">Message</Button>
+          </CardActions>
         </Card>
       </Grid>
     </>

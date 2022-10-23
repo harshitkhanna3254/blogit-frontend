@@ -51,7 +51,7 @@ const Profile = () => {
   });
 
   const submitForm = (values, props) => {
-    console.log(values, props);
+    // console.log(values, props);
   };
 
   return (

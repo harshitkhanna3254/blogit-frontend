@@ -4,27 +4,48 @@ import { Grid, Box, TextField, Button, Typography } from "@mui/material";
 import { getUsers } from "../services/users";
 import { useEffect, useState } from "react";
 
-const Friends = () => {
+const Friends = ({ index }) => {
   const [friends, setFriends] = useState();
   const [newFriend, setNewFriend] = useState("");
 
   useEffect(() => {
-    getUsers(0, 3).then((res) => {
-      console.log(res.data);
-      setFriends(res.data);
+    // console.log("Index of Logged In user received", index);
+    console.log("Fetchind 3 friends of user " + index);
+    getUsers().then((res) => {
+      const friends = [
+        res.data[(index + 1) % 10],
+        res.data[(index + 2) % 10],
+        res.data[(index + 3) % 10],
+      ];
+      setFriends(friends);
     });
-  }, []);
+  }, [index]);
 
   const renderFriends = () => {
-    console.log("rendering freinds");
     if (friends) {
+      console.log(friends);
       return friends.map((friend, id) => {
-        return <Friend name={friend.name} city={friend.address.city} />;
+        return (
+          <Friend
+            name={friend.name}
+            key={id}
+            id={friend.id}
+            unfollowFriend={unfollowFriend}
+          />
+        );
       });
-    } else {
-      return <Friend name="default" city="default" />;
     }
   };
+
+  const unfollowFriend = (id) => {
+    console.log("Unfollow friends", id);
+    setFriends(
+      friends.filter((friend) => {
+        return friend.id != id;
+      })
+    );
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>

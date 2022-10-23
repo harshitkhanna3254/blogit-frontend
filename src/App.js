@@ -8,6 +8,7 @@ import Prac from "./screens/Prac";
 
 function App() {
   return (
+    // <UserContext.Provider value="Harshit Khanna">
     <BrowserRouter>
       <Routes>
         <Route index element={<Login />} />
@@ -18,6 +19,7 @@ function App() {
         {/* <Route path="*" element={<NoPage />} /> */}
       </Routes>
     </BrowserRouter>
+    // </UserContext.Provider>
   );
 }
 

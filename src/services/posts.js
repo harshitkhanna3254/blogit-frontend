@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const getPosts = (start, end) => {
+export const getPosts = (userId) => {
   return axios.get(
-    `https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=${end}`
+    `https://jsonplaceholder.typicode.com/posts?userId${userId}&_limit=10`
   );
 };

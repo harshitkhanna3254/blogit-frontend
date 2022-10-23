@@ -1,7 +1,7 @@
 import { Typography, Button, TextField } from "@mui/material";
 import { useState } from "react";
 
-const Status = ({ status }) => {
+const Status = ({ name }) => {
   const [statusInput, setStatusInput] = useState("");
   const [statusValue, setStatusValue] = useState("Welcome to Blog-It");
 
@@ -13,7 +13,7 @@ const Status = ({ status }) => {
   return (
     <>
       <Typography variant="h5" component="h5">
-        Harshit Khanna
+        {name}
       </Typography>
 
       <Typography variant="subtle2" component="h6" className="margin_medium">

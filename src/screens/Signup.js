@@ -48,7 +48,7 @@ const Signup = () => {
   });
 
   const submitForm = (values, props) => {
-    console.log(values, props);
+    // console.log(values, props);
   };
 
   return (
@@ -60,7 +60,7 @@ const Signup = () => {
             <Avatar className="avatar">
               <AddBoxIcon></AddBoxIcon>
             </Avatar>
-            <h2 className="margin_large">Register</h2>
+            <h2 className="margin_large">Register </h2>
           </Grid>
 
           <Formik

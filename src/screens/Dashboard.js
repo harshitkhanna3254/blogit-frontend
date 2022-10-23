@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import "../css/dashboard.css";
 import Friends from "../components/Friends";
 import Posts from "../components/Posts";
+import { useEffect, useState } from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -21,11 +22,21 @@ const Item = styled(Paper)(({ theme }) => ({
 const Dashboard = () => {
   var newPost = {};
 
+  const [index, setIndex] = useState();
+  const [name, setName] = useState();
+
+  useEffect(() => {
+    setIndex(sessionStorage.getItem("loggedInUserIndex"));
+    // console.log(JSON.parse(sessionStorage.getItem("loggedInUserIndex")));
+    setName(JSON.parse(sessionStorage.getItem("loggedInUser")).name);
+    console.log(index);
+  }, [index]);
+
   //Functions called from children
   const createNewPost = (postData) => {
-    console.log("createNewPost() called from Dashboard", postData);
+    // console.log("createNewPost() called from Dashboard", postData);
     newPost = postData;
-    console.log(newPost);
+    // console.log(newPost);
   };
 
   return (
@@ -34,7 +45,7 @@ const Dashboard = () => {
       <Grid container mt={1} ml={1} spacing={2} className="top_container">
         <Grid item xs={4}>
           <Item>
-            <Status />
+            <Status name={name} />
           </Item>
         </Grid>
 
@@ -47,14 +58,12 @@ const Dashboard = () => {
 
       <Grid container mt={1} ml={1} spacing={2} className="bottom_container">
         <Grid item xs={4}>
-          <Item>
-            <Friends />
-          </Item>
+          <Item>{index ? <Friends index={index} /> : null}</Item>
         </Grid>
 
         <Grid item xs={8}>
           <Item>
-            <Posts newPost={newPost} />
+            {index ? <Posts index={index} newPost={newPost} /> : null}
           </Item>
         </Grid>
       </Grid>
