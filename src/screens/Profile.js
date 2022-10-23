@@ -43,7 +43,7 @@ const Profile = () => {
     phoneNumber: Yup.string()
       .min(10, PHONE_NUMBER_ERROR)
       .max(10, PHONE_NUMBER_ERROR),
-    password: Yup.string().min(8, PASSWORD_MIN_LENGTH_ERROR),
+    password: Yup.string().min(4, PASSWORD_MIN_LENGTH_ERROR),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref("password")],
       PASSWORDS_DONT_MATCH_ERROR

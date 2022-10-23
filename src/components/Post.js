@@ -10,7 +10,7 @@ import {
   Grid,
 } from "@mui/material";
 
-const Post = ({ id, body }) => {
+const Post = ({ id, body, img, title }) => {
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -25,7 +25,7 @@ const Post = ({ id, body }) => {
             component="img"
             alt="Default Image"
             height="140"
-            image={`https://picsum.photos/id/${getRandomInt(1, 255)}/200/300`}
+            image={img}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">

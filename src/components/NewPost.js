@@ -5,10 +5,14 @@ const NewPost = ({ createNewPost }) => {
   const [postInput, setPostInput] = useState("");
   // const [postImage, setPostImage] = useState("");
 
-  function submitPost() {
-    // console.log("Submit Post called from NewPost ", postInput);
-    createNewPost({ body: postInput });
-  }
+  // function submitPost() {
+  //   console.log("Submit Post called from NewPost ", postInput);
+  //   createNewPost({ body: postInput });
+  // }
+
+  const clearPost = () => {
+    setPostInput("");
+  };
 
   return (
     <>
@@ -40,6 +44,7 @@ const NewPost = ({ createNewPost }) => {
             variant="outlined"
             component="label"
             color="warning"
+            onClick={clearPost}
           >
             Cancel
           </Button>
@@ -51,7 +56,8 @@ const NewPost = ({ createNewPost }) => {
             component="label"
             color="success"
             onClick={() => {
-              if (postInput) submitPost();
+              if (postInput) createNewPost(postInput);
+              setPostInput("");
             }}
           >
             Submit

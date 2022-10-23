@@ -25,7 +25,7 @@ const Friend = ({ name, id, unfollowFriend }) => {
             component="img"
             alt="Default Image"
             height="140"
-            image={`https://picsum.photos/id/${getRandomInt(1, 255)}/200/300`}
+            image={`https://picsum.photos/id/${id + 130}/200/300`}
           />
           <CardContent>
             <Typography

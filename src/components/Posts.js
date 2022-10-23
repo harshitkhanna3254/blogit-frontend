@@ -9,23 +9,48 @@ const Posts = ({ index, newPost }) => {
 
   // const [index, setIndex] = useState();
 
+  const images = [
+    `https://picsum.photos/id/110/200/300`,
+    `https://picsum.photos/id/111/200/300`,
+    `https://picsum.photos/id/112/200/300`,
+    `https://picsum.photos/id/113/200/300`,
+    `https://picsum.photos/id/114/200/300`,
+    `https://picsum.photos/id/115/200/300`,
+    `https://picsum.photos/id/116/200/300`,
+    `https://picsum.photos/id/117/200/300`,
+    `https://picsum.photos/id/118/200/300`,
+    `https://picsum.photos/id/119/200/300`,
+  ];
+
   useEffect(() => {
     console.log("Getting posts for user with index " + index);
     getPosts(index).then((res) => {
       console.log(`All posts of user with index ${index}`, res);
+      res.data.forEach((object, index) => {
+        object.img = images[index];
+      });
       setPosts(res.data);
     });
   }, [index]);
 
-  // useEffect(() => {
-  //   // console.log("From second UE. Current state:", posts);
-  //   setPosts((current) => [{ newPost }, ...current]);
-  // }, [newPost]);
+  useEffect(() => {
+    console.log("From second UE. New Post:", posts);
+    setPosts((current) => [{ body: newPost }, ...current]);
+    console.log(posts);
+  }, [newPost]);
 
   const renderPosts = () => {
     if (posts) {
-      return posts.map((post, id) => {
-        return <Post body={post.body} key={id} />;
+      return posts.map((post, idx) => {
+        return (
+          <Post
+            body={post.body}
+            title={post.title}
+            img={post.img}
+            key={idx}
+            id={idx}
+          />
+        );
       });
     } else {
       return <Post body="default body" />;

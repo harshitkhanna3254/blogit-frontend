@@ -20,28 +20,25 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
-  var newPost = {};
-
   const [index, setIndex] = useState();
   const [name, setName] = useState();
+  const [newPost, setNewPost] = useState("");
 
   useEffect(() => {
     setIndex(sessionStorage.getItem("loggedInUserIndex"));
-    // console.log(JSON.parse(sessionStorage.getItem("loggedInUserIndex")));
     setName(JSON.parse(sessionStorage.getItem("loggedInUser")).name);
     console.log(index);
   }, [index]);
 
   //Functions called from children
   const createNewPost = (postData) => {
-    // console.log("createNewPost() called from Dashboard", postData);
-    newPost = postData;
-    // console.log(newPost);
+    console.log("createNewPost() called from Dashboard", postData);
+    setNewPost(postData);
   };
 
   return (
     <>
-      <Navbar />
+      <Navbar loggedInUser={true} />
       <Grid container mt={1} ml={1} spacing={2} className="top_container">
         <Grid item xs={4}>
           <Item>

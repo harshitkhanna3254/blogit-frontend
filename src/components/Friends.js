@@ -41,7 +41,7 @@ const Friends = ({ index }) => {
     console.log("Unfollow friends", id);
     setFriends(
       friends.filter((friend) => {
-        return friend.id != id;
+        return friend.id !== id;
       })
     );
   };
@@ -64,6 +64,10 @@ const Friends = ({ index }) => {
         >
           Friends
         </Typography>
+        {/* <Typography variant="subtle2" component="h6" className="margin_medium">
+          (Images are generated dynamically. Will change after rendering friends
+          again)
+        </Typography> */}
         <Grid container spacing={2}>
           {renderFriends()}
           <Grid container spacing={3} mt={4} ml={2}>
