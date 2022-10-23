@@ -22,11 +22,14 @@ const Item = styled(Paper)(({ theme }) => ({
 const Dashboard = () => {
   const [index, setIndex] = useState();
   const [name, setName] = useState();
+  const [user, setUser] = useState();
+
   const [newPost, setNewPost] = useState("");
 
   useEffect(() => {
     setIndex(sessionStorage.getItem("loggedInUserIndex"));
     setName(JSON.parse(sessionStorage.getItem("loggedInUser")).name);
+    setUser(JSON.parse(sessionStorage.getItem("loggedInUser")));
     console.log(index);
   }, [index]);
 
