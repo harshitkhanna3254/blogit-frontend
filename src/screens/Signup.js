@@ -16,8 +16,9 @@ import {
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import "../css/signup.css";
 import {
   NAME_MIN_LENGTH_ERROR,
   PASSWORDS_DONT_MATCH_ERROR,
@@ -25,7 +26,11 @@ import {
   PHONE_NUMBER_ERROR,
 } from "../constants/Signup";
 
+import "../css/signup.css";
+
 const Signup = () => {
+  const navigate = useNavigate();
+
   const formInitialValues = {
     name: "",
     email: "",
@@ -37,10 +42,8 @@ const Signup = () => {
 
   const formValidationSchema = Yup.object().shape({
     name: Yup.string().min(3, NAME_MIN_LENGTH_ERROR),
-    phoneNumber: Yup.string()
-      .min(10, PHONE_NUMBER_ERROR)
-      .max(10, PHONE_NUMBER_ERROR),
-    password: Yup.string().min(8, PASSWORD_MIN_LENGTH_ERROR),
+    phoneNumber: Yup.string().min(10, PHONE_NUMBER_ERROR),
+    password: Yup.string().min(4, PASSWORD_MIN_LENGTH_ERROR),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref("password")],
       PASSWORDS_DONT_MATCH_ERROR
@@ -48,7 +51,13 @@ const Signup = () => {
   });
 
   const submitForm = (values, props) => {
-    // console.log(values, props);
+    console.log(values, props);
+
+    sessionStorage.setItem("loggedInUser", JSON.stringify(values));
+
+    navigate("/dashboard");
+
+    props.resetForm();
   };
 
   return (
@@ -94,7 +103,7 @@ const Signup = () => {
                 />
 
                 <FormGroup className="margin_medium">
-                  <FormLabel id="demo-radio-buttons-group-label">
+                  <FormLabel id="demo-radio-buttons-group-label" required>
                     Gender
                   </FormLabel>
 
@@ -159,21 +168,16 @@ const Signup = () => {
                   required
                 />
 
-                <Link
-                  to="/dashboard"
-                  style={{ textDecoration: "none", color: "white" }}
+                <Button
+                  variant="contained"
+                  type="submit"
+                  color="primary"
+                  className="margin_medium"
+                  disabled={props.isSubmitting}
+                  fullWidth
                 >
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    color="primary"
-                    className="margin_medium"
-                    disabled={props.isSubmitting}
-                    fullWidth
-                  >
-                    {props.isSubmitting ? "Loading" : "Sign up"}
-                  </Button>
-                </Link>
+                  {props.isSubmitting ? "Loading" : "Sign up"}
+                </Button>
               </Form>
             )}
           </Formik>

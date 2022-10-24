@@ -14,7 +14,7 @@ const Navbar = () => {
   const [loggedInUser, setLoggedInUser] = useState();
 
   useEffect(() => {
-    setLoggedInUser(sessionStorage.getItem("loggedInUserIndex"));
+    setLoggedInUser(sessionStorage.getItem("loggedInUser"));
   });
 
   const logout = () => {

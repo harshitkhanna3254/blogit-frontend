@@ -24,41 +24,62 @@ import PasswordIcon from "@mui/icons-material/Password";
 import "../css/profile.css";
 import {
   NAME_MIN_LENGTH_ERROR,
-  PASSWORDS_DONT_MATCH_ERROR,
   PASSWORD_MIN_LENGTH_ERROR,
   PHONE_NUMBER_ERROR,
 } from "../constants/Signup";
+import { useEffect, useState } from "react";
 
 const Profile = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    console.log("ProfileUE called");
+
+    const userData = JSON.parse(sessionStorage.getItem("loggedInUser"));
+    setName(userData.name);
+    setEmail(userData.email);
+    setPhoneNumber(userData.phone.slice(0, 13));
+    setPassword(userData.address.street);
+
+    console.log(userData);
+  }, []);
+
   const formInitialValues = {
     name: "",
     email: "",
     phoneNumber: "",
     password: "",
-    confirmPassword: "",
   };
 
   const formValidationSchema = Yup.object().shape({
     name: Yup.string().min(3, NAME_MIN_LENGTH_ERROR),
-    phoneNumber: Yup.string()
-      .min(10, PHONE_NUMBER_ERROR)
-      .max(10, PHONE_NUMBER_ERROR),
+    phoneNumber: Yup.string().min(10, PHONE_NUMBER_ERROR),
+
     password: Yup.string().min(4, PASSWORD_MIN_LENGTH_ERROR),
-    confirmPassword: Yup.string().oneOf(
-      [Yup.ref("password")],
-      PASSWORDS_DONT_MATCH_ERROR
-    ),
   });
 
   const submitForm = (values, props) => {
-    // console.log(values, props);
+    console.log(values, props);
+
+    const { name, email, phoneNumber, password } = values;
+
+    if (name !== "") setName(values.name);
+
+    if (email !== "") setEmail(values.email);
+
+    if (phoneNumber !== "") setPhoneNumber(values.phoneNumber);
+
+    if (password !== "") setPassword(values.password);
 
     props.resetForm();
   };
 
   return (
     <div>
-      <Navbar />
+      <Navbar loggedInUser={true} />
 
       <Grid sx={{ flexGrow: 1 }} container spacing={2}>
         <Grid item xs={12}>
@@ -99,7 +120,7 @@ const Profile = () => {
                         <BadgeIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Name" secondary="abcdef" />
+                    <ListItemText primary="Name" secondary={name} />
                   </ListItem>
                   <ListItem>
                     <ListItemAvatar>
@@ -107,10 +128,7 @@ const Profile = () => {
                         <EmailIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText
-                      primary="Email"
-                      secondary="harshitkhanna3254@gmail.com"
-                    />
+                    <ListItemText primary="Email" secondary={email} />
                   </ListItem>
                   <ListItem>
                     <ListItemAvatar>
@@ -120,7 +138,7 @@ const Profile = () => {
                     </ListItemAvatar>
                     <ListItemText
                       primary="Phone Number"
-                      secondary="1234567890"
+                      secondary={phoneNumber}
                     />
                   </ListItem>
                   <ListItem>
@@ -129,7 +147,7 @@ const Profile = () => {
                         <PasswordIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Password" secondary="xyzzzzz" />
+                    <ListItemText primary="Password" secondary={password} />
                   </ListItem>
                 </List>
               </Paper>
@@ -193,18 +211,6 @@ const Profile = () => {
                         placeholder="Enter Password"
                         className="margin_medium"
                         helperText={<ErrorMessage name="password" />}
-                        type="password"
-                        fullWidth
-                        size="small"
-                      />
-
-                      <Field
-                        as={TextField}
-                        name="confirmPassword"
-                        label="Confirm Password"
-                        placeholder="Confirm Password"
-                        className="margin_medium"
-                        helperText={<ErrorMessage name="confirmPassword" />}
                         type="password"
                         fullWidth
                         size="small"

@@ -23,24 +23,29 @@ const Posts = ({ index, newPost }) => {
   ];
 
   useEffect(() => {
-    console.log("Getting posts for user with index " + index);
-    getPosts(index).then((res) => {
-      console.log(`All posts of user with index ${index}`, res);
-      res.data.forEach((object, index) => {
-        object.img = images[index];
+    if (index >= 0) {
+      console.log("Getting posts for user with index " + index);
+      getPosts(index).then((res) => {
+        console.log(`All posts of user with index ${index}`, res);
+        res.data.forEach((object, index) => {
+          object.img = images[index];
+        });
+        setPosts(res.data);
       });
-      setPosts(res.data);
-    });
+    }
   }, [index]);
 
   useEffect(() => {
-    console.log("From second UE. New Post:", posts);
-    setPosts((current) => [{ body: newPost }, ...current]);
+    console.log("From second UE. New Post:", posts, newPost);
+    if (newPost) {
+      setPosts((current) => [{ body: newPost }, ...current]);
+    }
     console.log(posts);
   }, [newPost]);
 
   const renderPosts = () => {
-    if (posts) {
+    console.log(posts);
+    if (posts.length > 0) {
       return posts.map((post, idx) => {
         return (
           <Post
@@ -52,8 +57,6 @@ const Posts = ({ index, newPost }) => {
           />
         );
       });
-    } else {
-      return <Post body="default body" />;
     }
   };
 
