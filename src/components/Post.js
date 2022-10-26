@@ -10,7 +10,7 @@ import {
   Grid,
 } from "@mui/material";
 
-const Post = ({ id, body, img, title }) => {
+const Post = ({ id, body, img, name, title }) => {
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -29,7 +29,7 @@ const Post = ({ id, body, img, title }) => {
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {id}
+              {name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {body}

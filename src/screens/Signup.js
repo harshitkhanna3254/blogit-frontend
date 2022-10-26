@@ -35,14 +35,14 @@ const Signup = () => {
     name: "",
     email: "",
     gender: "",
-    phoneNumber: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   };
 
   const formValidationSchema = Yup.object().shape({
     name: Yup.string().min(3, NAME_MIN_LENGTH_ERROR),
-    phoneNumber: Yup.string().min(10, PHONE_NUMBER_ERROR),
+    phone: Yup.string().min(10, PHONE_NUMBER_ERROR),
     password: Yup.string().min(4, PASSWORD_MIN_LENGTH_ERROR),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref("password")],
@@ -134,10 +134,10 @@ const Signup = () => {
 
                 <Field
                   as={TextField}
-                  name="phoneNumber"
+                  name="phone"
                   label="Phone Number"
                   placeholder="Enter Phone Number"
-                  helperText={<ErrorMessage name="phoneNumber" />}
+                  helperText={<ErrorMessage name="phone" />}
                   className="margin_medium"
                   type="number"
                   fullWidth

@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllUsers } from "../services/users";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
   Checkbox,
   Button,
   Typography,
+  Alert,
 } from "@mui/material";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -27,6 +28,8 @@ import "../css/login.css";
 
 const Login = () => {
   var users;
+
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -60,7 +63,11 @@ const Login = () => {
           sessionStorage.setItem("loggedInUserIndex", JSON.stringify(index));
           navigate("/dashboard");
           break;
+        } else {
+          setError(true);
         }
+      } else {
+        setError(true);
       }
     }
 
@@ -112,7 +119,9 @@ const Login = () => {
                 />
 
                 <FormGroup className="margin_medium">
-                  <FormLabel id="">Terms and Conditions</FormLabel>
+                  <FormLabel id="" required>
+                    Terms and Conditions
+                  </FormLabel>
 
                   <Field
                     as={FormControlLabel}
@@ -123,6 +132,7 @@ const Login = () => {
                     control={
                       <Checkbox
                         defaultChecked
+                        required
                         name="checkbox"
                         color="success"
                       />
@@ -142,7 +152,7 @@ const Login = () => {
                   disabled={props.isSubmitting}
                   fullWidth
                 >
-                  {props.isSubmitting ? "Loading" : "Sign up"}
+                  {props.isSubmitting ? "Loading" : "Log In"}
                 </Button>
                 {/* </Link> */}
               </Form>
@@ -156,6 +166,7 @@ const Login = () => {
             Don't have an account?
             <Link to="/signup"> Sign Up</Link>
           </Typography>
+          {error ? <Alert severity="warning">Invalid Credentials</Alert> : null}
         </Paper>
       </Grid>
     </>

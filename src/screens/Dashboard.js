@@ -58,7 +58,9 @@ const Dashboard = () => {
 
       <Grid container mt={1} ml={1} spacing={2} className="bottom_container">
         <Grid item xs={4}>
-          <Item>{index ? <Friends index={index} /> : null}</Item>
+          <Item>
+            {index ? <Friends index={index} /> : <Friends index={-1} />}
+          </Item>
         </Grid>
 
         <Grid item xs={8}>

@@ -5,21 +5,29 @@ import { getUsers } from "../services/users";
 import { useEffect, useState } from "react";
 
 const Friends = ({ index }) => {
-  const [friends, setFriends] = useState();
+  const [friends, setFriends] = useState([]);
   const [newFriend, setNewFriend] = useState("");
 
   useEffect(() => {
     // console.log("Index of Logged In user received", index);
-    console.log("Fetchind 3 friends of user " + index);
-    getUsers().then((res) => {
-      const friends = [
-        res.data[(index + 1) % 10],
-        res.data[(index + 2) % 10],
-        res.data[(index + 3) % 10],
-      ];
-      setFriends(friends);
-    });
+    if (index > 0) {
+      console.log("Fetchind 3 friends of user " + index);
+      getUsers().then((res) => {
+        const friends = [
+          res.data[(index + 1) % 10],
+          res.data[(index + 2) % 10],
+          res.data[(index + 3) % 10],
+        ];
+        setFriends(friends);
+      });
+    }
   }, [index]);
+
+  const addFriend = () => {
+    console.log("Adding friend");
+    setFriends((current) => [...current, { name: newFriend }]);
+    setNewFriend("");
+  };
 
   const renderFriends = () => {
     if (friends) {
@@ -56,18 +64,10 @@ const Friends = ({ index }) => {
           gutterBottom
           variant="h5"
           component="div"
-          sx={
-            {
-              // color: "success.main",
-            }
-          }
         >
           Friends
         </Typography>
-        {/* <Typography variant="subtle2" component="h6" className="margin_medium">
-          (Images are generated dynamically. Will change after rendering friends
-          again)
-        </Typography> */}
+
         <Grid container spacing={2}>
           {renderFriends()}
           <Grid container spacing={3} mt={4} ml={2}>
@@ -88,11 +88,8 @@ const Friends = ({ index }) => {
                 variant="outlined"
                 component="label"
                 color="success"
+                onClick={() => addFriend()}
                 style={{
-                  //   maxWidth: "50px",
-                  //   maxHeight: "50px",
-                  //   minWidth: "50px",
-                  //   minHeight: "50px",
                   fontSize: "24px",
                 }}
               >

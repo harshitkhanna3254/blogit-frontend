@@ -39,6 +39,7 @@ const Profile = () => {
     console.log("ProfileUE called");
 
     const userData = JSON.parse(sessionStorage.getItem("loggedInUser"));
+    console.log(userData);
     setName(userData.name);
     setEmail(userData.email);
     setPhoneNumber(userData.phone.slice(0, 13));
@@ -97,12 +98,13 @@ const Profile = () => {
                   <CardContent>
                     <Button
                       variant="contained"
-                      type="submit"
                       color="success"
                       fullWidth
                       size="small"
+                      component="label"
                     >
                       Upload Image
+                      <input type="file" hidden />
                     </Button>
                   </CardContent>
                 </Card>
