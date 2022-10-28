@@ -11,11 +11,9 @@ import {
 } from "@mui/material";
 
 const Post = ({ id, body, img, name, title }) => {
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-  }
+  const firstUrl = "https://picsum.photos/id/";
+  const secondUrl = "/200/300";
+  const imgUrl = `${firstUrl}${id}${secondUrl}`;
 
   return (
     <>
@@ -25,7 +23,7 @@ const Post = ({ id, body, img, name, title }) => {
             component="img"
             alt="Default Image"
             height="140"
-            image={img}
+            image={imgUrl}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">

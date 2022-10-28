@@ -10,13 +10,7 @@ import {
 
 import "../css/friend.css";
 
-const Friend = ({ name, id, unfollowFriend }) => {
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-  }
-
+const Friend = ({ name, id, username, unfollowFriend }) => {
   return (
     <>
       <Grid item xs={6}>
@@ -35,6 +29,14 @@ const Friend = ({ name, id, unfollowFriend }) => {
               component="div"
             >
               {name}
+            </Typography>
+            <Typography
+              align="center"
+              gutterBottom
+              variant="subtle3"
+              component="div"
+            >
+              ({username})
             </Typography>
           </CardContent>
           <CardActions>

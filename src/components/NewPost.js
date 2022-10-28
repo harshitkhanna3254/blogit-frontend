@@ -3,12 +3,6 @@ import { useState } from "react";
 
 const NewPost = ({ createNewPost }) => {
   const [postInput, setPostInput] = useState("");
-  // const [postImage, setPostImage] = useState("");
-
-  // function submitPost() {
-  //   console.log("Submit Post called from NewPost ", postInput);
-  //   createNewPost({ body: postInput });
-  // }
 
   const clearPost = () => {
     setPostInput("");

@@ -4,7 +4,6 @@ import Login from "./screens/Login";
 import Signup from "./screens/Signup";
 import Dashboard from "./screens/Dashboard";
 import Profile from "./screens/Profile";
-import Prac from "./screens/Prac";
 
 function App() {
   return (
@@ -15,7 +14,6 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/dashboard1" element={<Prac />} />
         {/* <Route path="*" element={<NoPage />} /> */}
       </Routes>
     </BrowserRouter>

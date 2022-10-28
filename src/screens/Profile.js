@@ -36,16 +36,17 @@ const Profile = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    console.log("ProfileUE called");
-
     const userData = JSON.parse(sessionStorage.getItem("loggedInUser"));
-    console.log(userData);
+
     setName(userData.name);
     setEmail(userData.email);
-    setPhoneNumber(userData.phone.slice(0, 13));
-    setPassword(userData.address.street);
+    setPhoneNumber(userData.phone);
 
-    console.log(userData);
+    if (userData.index >= 0) {
+      setPassword(userData.address.street);
+    } else {
+      setPassword(userData.password);
+    }
   }, []);
 
   const formInitialValues = {
@@ -63,8 +64,6 @@ const Profile = () => {
   });
 
   const submitForm = (values, props) => {
-    console.log(values, props);
-
     const { name, email, phoneNumber, password } = values;
 
     if (name !== "") setName(values.name);
@@ -122,7 +121,11 @@ const Profile = () => {
                         <BadgeIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Name" secondary={name} />
+                    <ListItemText
+                      data-testid="name_text_profile"
+                      primary="Name"
+                      secondary={name}
+                    />
                   </ListItem>
                   <ListItem>
                     <ListItemAvatar>
@@ -130,7 +133,11 @@ const Profile = () => {
                         <EmailIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Email" secondary={email} />
+                    <ListItemText
+                      data-testid="email_text_profile"
+                      primary="Email"
+                      secondary={email}
+                    />
                   </ListItem>
                   <ListItem>
                     <ListItemAvatar>
@@ -139,6 +146,7 @@ const Profile = () => {
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
+                      data-testid="phone_text_profile"
                       primary="Phone Number"
                       secondary={phoneNumber}
                     />
@@ -149,7 +157,11 @@ const Profile = () => {
                         <PasswordIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Password" secondary={password} />
+                    <ListItemText
+                      data-testid="password_text_profile"
+                      primary="Password"
+                      secondary={password}
+                    />
                   </ListItem>
                 </List>
               </Paper>
@@ -176,6 +188,7 @@ const Profile = () => {
                         name="name"
                         label="Name"
                         placeholder="Enter Name"
+                        inputProps={{ "data-testid": "name_profile" }}
                         type="text"
                         className="margin_medium"
                         helperText={<ErrorMessage name="name" />}
@@ -188,6 +201,7 @@ const Profile = () => {
                         name="email"
                         label="Email"
                         placeholder="Enter Email"
+                        inputProps={{ "data-testid": "email_profile" }}
                         type="email"
                         className="margin_medium"
                         fullWidth
@@ -199,6 +213,7 @@ const Profile = () => {
                         name="phoneNumber"
                         label="Phone Number"
                         placeholder="Enter Phone Number"
+                        inputProps={{ "data-testid": "phone_profile" }}
                         helperText={<ErrorMessage name="phoneNumber" />}
                         className="margin_medium"
                         type="number"
@@ -211,6 +226,7 @@ const Profile = () => {
                         name="password"
                         label="Password"
                         placeholder="Enter Password"
+                        inputProps={{ "data-testid": "password_profile" }}
                         className="margin_medium"
                         helperText={<ErrorMessage name="password" />}
                         type="password"
@@ -222,6 +238,7 @@ const Profile = () => {
                         variant="contained"
                         type="submit"
                         color="primary"
+                        data-testid="button_profile"
                         className="margin_medium"
                         disabled={props.isSubmitting}
                         fullWidth

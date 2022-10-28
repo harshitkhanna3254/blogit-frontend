@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllUsers } from "../services/users";
+import { getUsers } from "../services/users";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -27,19 +27,20 @@ import LockIcon from "@mui/icons-material/Lock";
 import "../css/login.css";
 
 const Login = () => {
-  var users;
+  const [users, setUsers] = useState([]);
 
   const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAllUsers().then((res) => {
-      console.log(res.data);
-      // setFriends(res.data);
-      users = res.data;
-    }, []);
-  });
+    async function fetchUsers() {
+      const fetchedUsers = await getUsers();
+      setUsers(fetchedUsers);
+      sessionStorage.setItem("allUsers", JSON.stringify(fetchedUsers));
+    }
+    fetchUsers();
+  }, []);
 
   const formInitialValues = {
     username: "",
@@ -51,25 +52,25 @@ const Login = () => {
   });
 
   const submitForm = ({ username, password }, props) => {
-    // console.log(values, props);
-    // console.log(username, password, props);
-
-    for (let index = 0; index < users.length; index++) {
-      let user = users[index];
+    users.map((user) => {
       if (username === user.username) {
         if (password === user.address.street) {
-          // console.log("Login success");
           sessionStorage.setItem("loggedInUser", JSON.stringify(user));
-          sessionStorage.setItem("loggedInUserIndex", JSON.stringify(index));
+          sessionStorage.setItem("loggedInUserIndex", JSON.stringify(user.id));
           navigate("/dashboard");
-          break;
+          return;
         } else {
           setError(true);
         }
       } else {
         setError(true);
       }
-    }
+    });
+
+    // for (let index = 0; index < users.length; index++) {
+    //   let user = users[index];
+
+    // }
 
     props.resetForm();
   };
@@ -109,6 +110,7 @@ const Login = () => {
                 <Field
                   as={TextField}
                   label="Password"
+                  id="password_login"
                   placeholder="Enter Password"
                   className="margin_medium"
                   name="password"
@@ -146,6 +148,7 @@ const Login = () => {
                 > */}
                 <Button
                   variant="contained"
+                  data-testid="button_login"
                   type="submit"
                   color="primary"
                   className="margin_medium"

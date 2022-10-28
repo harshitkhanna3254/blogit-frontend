@@ -18,7 +18,6 @@ const Navbar = () => {
   });
 
   const logout = () => {
-    console.log("logout");
     sessionStorage.clear();
     setLoggedInUser(null);
   };
@@ -42,6 +41,13 @@ const Navbar = () => {
 
           {loggedInUser ? (
             <>
+              <Link
+                to="/dashboard"
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                Dashboard
+                <Button color="inherit"></Button>
+              </Link>
               <Link
                 to="/profile"
                 style={{ textDecoration: "none", color: "white" }}

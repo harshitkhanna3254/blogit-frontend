@@ -4,72 +4,70 @@ import { Grid, Box, Typography, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getPosts } from "../services/posts";
 
-const Posts = ({ index, newPost }) => {
+const Posts = ({ loggedInUser, newPostData, postsByFriends }) => {
+  const [currentUserPosts, setCurrentUserPosts] = useState([]);
   const [posts, setPosts] = useState([]);
-  // const [tempPosts, setTempPosts] = useState([]);
   const [name, setName] = useState("");
   const [searchInput, setSearchInput] = useState("");
 
-  // const [index, setIndex] = useState();
-
-  const images = [
-    `https://picsum.photos/id/110/200/300`,
-    `https://picsum.photos/id/111/200/300`,
-    `https://picsum.photos/id/112/200/300`,
-    `https://picsum.photos/id/113/200/300`,
-    `https://picsum.photos/id/114/200/300`,
-    `https://picsum.photos/id/115/200/300`,
-    `https://picsum.photos/id/116/200/300`,
-    `https://picsum.photos/id/117/200/300`,
-    `https://picsum.photos/id/118/200/300`,
-    `https://picsum.photos/id/119/200/300`,
-  ];
-
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("Handle Search");
     setSearchInput(e.target.value);
-    // if (searchInput.length > 0) {
-    //   console.log("> 0");
-
-    //   tempPosts.filter((post) => {
-    //     return setPosts(post.body.match(searchInput));
-    //   });
-    // }
   };
 
   useEffect(() => {
-    if (index >= 0 && !searchInput) {
-      console.log("Getting posts for user with index " + index);
+    if (loggedInUser.id >= 0 && !searchInput) {
       setName(JSON.parse(sessionStorage.getItem("loggedInUser")).name);
-      getPosts(index).then((res) => {
-        console.log(`All posts of user with index ${index}`, res);
-        res.data.forEach((object, index) => {
-          object.img = images[index];
-        });
-        setPosts(res.data);
-        // setTempPosts(res.data);
-      });
+
+      async function setUserPosts() {
+        var postsByFetch = await getPosts(loggedInUser.id);
+        postsByFetch = postsByFetch.map((post) => ({
+          name: loggedInUser.name,
+          ...post,
+        }));
+        setCurrentUserPosts(postsByFetch);
+        setPosts(postsByFetch);
+        localStorage.setItem("postsTest", JSON.stringify(posts));
+      }
+      setUserPosts();
     }
-  }, [index]);
+  }, [loggedInUser]);
 
   useEffect(() => {
-    console.log("From second UE. New Post:", posts, newPost);
-
-    if (newPost) {
-      setPosts((current) => [{ body: newPost }, ...current]);
+    if (newPostData) {
+      setPosts((current) => [
+        { body: newPostData.postText, name: newPostData.name },
+        ...current,
+      ]);
     }
-    console.log(posts);
-  }, [newPost]);
+  }, [newPostData]);
+
+  useEffect(() => {
+    if (postsByFriends) {
+      setPosts([...currentUserPosts, ...postsByFriends]);
+    }
+  }, [postsByFriends]);
 
   const renderPosts = () => {
     if (posts) {
+      const filteredPosts = posts.filter((post) => {
+        if (searchInput === "") return post;
+        else if (
+          post.body.toLowerCase().includes(searchInput.toLowerCase()) ||
+          post.name.toLowerCase().includes(searchInput.toLowerCase())
+        ) {
+          return post;
+        }
+      });
+
+      localStorage.setItem("filteredPosts", JSON.stringify(filteredPosts));
+
       return posts
         .filter((post) => {
-          if (searchInput == "") return post;
+          if (searchInput === "") return post;
           else if (
             post.body.toLowerCase().includes(searchInput.toLowerCase()) ||
-            name.toLowerCase().includes(searchInput.toLowerCase())
+            post.name.toLowerCase().includes(searchInput.toLowerCase())
           ) {
             return post;
           }
@@ -77,12 +75,12 @@ const Posts = ({ index, newPost }) => {
         .map((post, idx) => {
           return (
             <Post
-              name={name}
+              name={post.name || name}
               body={post.body}
               title={post.title}
               img={post.img}
               key={idx}
-              id={idx}
+              id={post.id}
             />
           );
         });
@@ -99,11 +97,6 @@ const Posts = ({ index, newPost }) => {
           gutterBottom
           variant="h5"
           component="div"
-          sx={
-            {
-              // color: "success.main",
-            }
-          }
         >
           Posts
         </Typography>
@@ -118,6 +111,7 @@ const Posts = ({ index, newPost }) => {
             fullWidth
             type="search"
             onChange={handleSearch}
+            inputProps={{ "data-testid": "search_input" }}
             label="Search Posts"
             value={searchInput}
           />

@@ -51,12 +51,8 @@ const Signup = () => {
   });
 
   const submitForm = (values, props) => {
-    console.log(values, props);
-
     sessionStorage.setItem("loggedInUser", JSON.stringify(values));
-
     navigate("/dashboard");
-
     props.resetForm();
   };
 
@@ -69,7 +65,9 @@ const Signup = () => {
             <Avatar className="avatar">
               <AddBoxIcon></AddBoxIcon>
             </Avatar>
-            <h2 className="margin_large">Register </h2>
+            <h2 className="margin_large" data-testid="heading">
+              Register{" "}
+            </h2>
           </Grid>
 
           <Formik
@@ -121,6 +119,7 @@ const Signup = () => {
                     />
                     <FormControlLabel
                       value="male"
+                      data-testid="male_radio"
                       control={<Radio required />}
                       label="Male"
                     />
@@ -147,7 +146,8 @@ const Signup = () => {
                 <Field
                   as={TextField}
                   name="password"
-                  label="Password"
+                  label="Enter Password"
+                  data-testid="password_register"
                   placeholder="Enter Password"
                   className="margin_medium"
                   helperText={<ErrorMessage name="password" />}
@@ -160,6 +160,7 @@ const Signup = () => {
                   as={TextField}
                   name="confirmPassword"
                   label="Confirm Password"
+                  inputProps={{ "data-testid": "confirm_register" }}
                   placeholder="Confirm Password"
                   className="margin_medium"
                   helperText={<ErrorMessage name="confirmPassword" />}
@@ -170,6 +171,7 @@ const Signup = () => {
 
                 <Button
                   variant="contained"
+                  data-testid="button_register"
                   type="submit"
                   color="primary"
                   className="margin_medium"

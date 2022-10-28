@@ -9,6 +9,7 @@ import "../css/dashboard.css";
 import Friends from "../components/Friends";
 import Posts from "../components/Posts";
 import { useEffect, useState } from "react";
+import { getPosts } from "../services/posts";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -20,55 +21,105 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
-  const [index, setIndex] = useState();
-  const [name, setName] = useState();
-  // const [user, setUser] = useState();
-
-  const [newPost, setNewPost] = useState("");
+  const [id, setId] = useState();
+  const [loggedInUser, setLoggedInUser] = useState({});
+  const [newPostData, setNewPostData] = useState({});
+  const [postsByFriends, setPostsByFriends] = useState([]);
 
   useEffect(() => {
-    setIndex(sessionStorage.getItem("loggedInUserIndex"));
-    setName(JSON.parse(sessionStorage.getItem("loggedInUser")).name);
-    // setUser(JSON.parse(sessionStorage.getItem("loggedInUser")));
-    console.log(index);
-  }, [index]);
+    setId(sessionStorage.getItem("loggedInUserIndex"));
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedInUser")));
+  }, [id]);
 
   //Functions called from children
-  const createNewPost = (postData) => {
-    console.log("createNewPost() called from Dashboard", postData);
-    setNewPost(postData);
+  const createNewPost = (postText) => {
+    const postData = { postText, postOwner: loggedInUser.name };
+    setNewPostData(postData);
   };
+
+  async function getAllPostsByFriends(friends) {
+    var p = [];
+
+    for (let i = 0; i < friends.length; i++) {
+      const friend = friends[i];
+      const newPosts = await getPosts(friend.id);
+      const finalPostArr = newPosts.map((post) => ({
+        name: friend.name,
+        ...post,
+      }));
+      p.push(...finalPostArr);
+    }
+    setPostsByFriends(p);
+  }
 
   return (
     <>
       <Navbar loggedInUser={true} />
-      <Grid container mt={1} ml={1} spacing={2} className="top_container">
+      <Grid
+        container
+        mt={1}
+        ml={1}
+        spacing={2}
+        className="top_container"
+        data-testid="grid1"
+      >
         <Grid item xs={4}>
           <Item>
-            <Status name={name} />
+            <Status name={loggedInUser.name} data-testid="statusComponent" />
           </Item>
         </Grid>
 
         <Grid item xs={8}>
           <Item>
-            <NewPost createNewPost={createNewPost} />
+            <NewPost
+              createNewPost={createNewPost}
+              data-testid="newPostComponent"
+            />
           </Item>
         </Grid>
       </Grid>
 
-      <Grid container mt={1} ml={1} spacing={2} className="bottom_container">
+      <Grid
+        container
+        mt={1}
+        ml={1}
+        spacing={2}
+        className="bottom_container"
+        data-testid="grid2"
+      >
         <Grid item xs={4}>
-          <Item>
-            {index ? <Friends index={index} /> : <Friends index={-1} />}
+          <Item data-testid="item2">
+            {id ? (
+              <Friends
+                id={id}
+                getAllPostsByFriends={getAllPostsByFriends}
+                data-testid="friendComponent"
+              />
+            ) : (
+              <Friends
+                getAllPostsByFriends={getAllPostsByFriends}
+                data-testid="friendComponentEmpty"
+              />
+            )}
           </Item>
         </Grid>
 
         <Grid item xs={8}>
           <Item>
-            {index ? (
-              <Posts index={index} newPost={newPost} />
+            {id ? (
+              <Posts
+                loggedInUser={loggedInUser}
+                newPostData={newPostData}
+                postsByFriends={postsByFriends}
+                data-testid="postComponent"
+              />
             ) : (
-              <Posts index={-1} newPost={newPost} />
+              <Posts
+                loggedInUser={loggedInUser}
+                newPostData={newPostData}
+                postsByFriends={postsByFriends}
+                data-testid="postComponentEmpty"
+              />
             )}
           </Item>
         </Grid>
