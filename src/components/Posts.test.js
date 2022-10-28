@@ -32,7 +32,7 @@ describe("Posts Tests", () => {
 
   render(
     <Router>
-      <Posts id={2} newPost="abcdef" />
+      <Posts loggedInUser={registeredUser} newPost="abcdef" />
     </Router>
   );
 
