@@ -1,6 +1,12 @@
 import "@testing-library/jest-dom";
 
-import { fireEvent, getByText, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  getByText,
+  render,
+  screen,
+} from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Friend from "../components/Friend";
 import Dashboard from "./Dashboard";
@@ -46,11 +52,10 @@ describe("Dashboard tests", () => {
   //   const statusComponent = screen.getByTestId("statusComponent");
   //   const newPostComponent = screen.getByTestId("newPostComponent");
 
-  test("Dashboard is rendered", async () => {
+  test("Dashboard is rendered correctly", async () => {
     sessionStorage.setItem("loggedInUserIndex", 1);
 
     const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
     expect(grid2).toContainElement(item1);
-    // expect(getByText()).toBeInTheDocument();
   });
 });

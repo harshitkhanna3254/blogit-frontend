@@ -10,10 +10,12 @@ import {
   Grid,
 } from "@mui/material";
 
-const Post = ({ id, body, img, name, title }) => {
+const Post = ({ id, body, name }) => {
   const firstUrl = "https://picsum.photos/id/";
   const secondUrl = "/200/300";
   const imgUrl = `${firstUrl}${id}${secondUrl}`;
+
+  console.log(id);
 
   return (
     <>
@@ -26,7 +28,12 @@ const Post = ({ id, body, img, name, title }) => {
             image={imgUrl}
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              data-testid="name"
+            >
               {name}
             </Typography>
             <Typography variant="body2" color="text.secondary">

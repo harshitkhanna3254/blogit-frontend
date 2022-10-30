@@ -43,6 +43,7 @@ const Friend = ({ name, id, username, unfollowFriend }) => {
             <Button
               size="small"
               color="warning"
+              data-testid="button_removeFriend"
               onClick={() => {
                 unfollowFriend(id);
               }}

@@ -11,7 +11,12 @@ const Friends = ({ id, getAllPostsByFriends }) => {
   const [newFriendUsername, setNewFriendUsername] = useState("");
   const [error, setError] = useState(false);
 
+  console.log("id: ", id);
   useEffect(() => {
+    // if (!id) {
+    //   id = 9;
+    // }
+    console.log(id);
     setUsers(JSON.parse(sessionStorage.getItem("allUsers")));
 
     // const setAllUsers = async () => {
@@ -21,6 +26,7 @@ const Friends = ({ id, getAllPostsByFriends }) => {
     // setAllUsers();
 
     if (id > 0) {
+      console.log("y");
       var threeBuddies;
 
       const index = id - 1;
@@ -51,10 +57,12 @@ const Friends = ({ id, getAllPostsByFriends }) => {
 
     setTimeout(() => {
       friendsPostsAdded(friends);
+      localStorage.setItem("friendsOfUser", JSON.stringify(friends));
     }, 100);
   }, [friends]);
 
   const renderFriends = () => {
+    console.log(friends, id);
     if (friends) {
       return friends.map((friend, id) => {
         return (
@@ -100,6 +108,7 @@ const Friends = ({ id, getAllPostsByFriends }) => {
         return friend.id !== id;
       })
     );
+    localStorage.setItem("friendsAfterRemoving", friends);
   };
 
   return (
@@ -116,7 +125,7 @@ const Friends = ({ id, getAllPostsByFriends }) => {
           Friends
         </Typography>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} data-testid="friends_parent">
           {renderFriends()}
           <Grid container spacing={3} mt={4} ml={2}>
             {error ? <Alert severity="warning">Invalid Friend</Alert> : null}
@@ -138,6 +147,7 @@ const Friends = ({ id, getAllPostsByFriends }) => {
                 variant="outlined"
                 component="label"
                 color="success"
+                inputProps={{ "data-testid": "add_user" }}
                 onClick={() => addFriend()}
                 style={{
                   fontSize: "24px",

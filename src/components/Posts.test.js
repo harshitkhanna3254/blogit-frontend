@@ -61,4 +61,20 @@ describe("Posts Tests", () => {
       expect(filteredPosts.length).toBe(3);
     }, 50);
   });
+
+  test("Add friend: posts are added", async () => {
+    setTimeout(() => {
+      const filteredPosts = JSON.parse(localStorage.getItem("filteredPosts"));
+
+      const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+
+      fireEvent.change(searchInput, {
+        target: {
+          value: "quia",
+        },
+      });
+
+      expect(filteredPosts.length).toBe(3);
+    }, 50);
+  });
 });
