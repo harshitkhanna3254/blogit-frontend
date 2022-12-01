@@ -9,42 +9,59 @@ import {
   Button,
   Grid,
 } from "@mui/material";
+import TransitionsModal from "./TransitionsModal";
+import TransitionsModalComment from "./TransitionsModalComment";
 
-const Post = ({ id, body, name }) => {
-  const firstUrl = "https://picsum.photos/id/";
-  const secondUrl = "/200/300";
-  const imgUrl = `${firstUrl}${id}${secondUrl}`;
-
-  console.log(id);
+const Post = ({ id, author, name, body, img, comments, getUpdatedArticle }) => {
+  const sendUpdatedArticleToParent = (updatedArticle) => {
+    getUpdatedArticle(updatedArticle);
+  };
 
   return (
     <>
       <Grid item xs={4}>
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345, height: "300px" }}>
           <CardMedia
             component="img"
-            alt="Default Image"
+            alt="No Image for this post"
             height="140"
-            image={imgUrl}
+            image={img}
           />
           <CardContent>
+            <Typography align="center" variant="h5" component="div">
+              {name}
+            </Typography>
             <Typography
+              align="center"
               gutterBottom
-              variant="h5"
+              variant="subtle3"
               component="div"
               data-testid="name"
             >
-              {name}
+              ({author})
             </Typography>
+
             <Typography variant="body2" color="text.secondary">
               {body}
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" color="warning">
+            <TransitionsModal
+              color={"warning"}
+              text={"Update"}
+              id={id}
+              sendUpdatedArticleToParent={sendUpdatedArticleToParent}
+            />
+            {/* <Button size="small" color="warning">
               Edit
-            </Button>
-            <Button size="small">Comment</Button>
+            </Button> */}
+            <TransitionsModalComment
+              color={"primary"}
+              text={"Comments"}
+              id={id}
+              comments={comments}
+              sendUpdatedArticleToParent={sendUpdatedArticleToParent}
+            />
           </CardActions>
         </Card>
       </Grid>

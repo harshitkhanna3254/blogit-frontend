@@ -3,12 +3,15 @@ import Post from "../components/Post";
 import { Grid, Box, Typography, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getPosts } from "../services/posts";
+import PaginationList from "./Pagination";
 
-const Posts = ({ loggedInUser, newPostData, postsByFriends }) => {
-  const [currentUserPosts, setCurrentUserPosts] = useState([]);
+const Posts = ({ allPosts, getUpdatedPostData }) => {
   const [posts, setPosts] = useState([]);
-  const [name, setName] = useState("");
   const [searchInput, setSearchInput] = useState("");
+
+  //Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(6);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -16,58 +19,34 @@ const Posts = ({ loggedInUser, newPostData, postsByFriends }) => {
   };
 
   useEffect(() => {
-    if (loggedInUser.id >= 0 && !searchInput) {
-      setName(JSON.parse(sessionStorage.getItem("loggedInUser")).name);
-
-      async function setUserPosts() {
-        var postsByFetch = await getPosts(loggedInUser.id);
-        postsByFetch = postsByFetch.map((post) => ({
-          name: loggedInUser.name,
-          ...post,
-        }));
-        setCurrentUserPosts(postsByFetch);
-        setPosts(postsByFetch);
-        localStorage.setItem("postsTest", JSON.stringify(posts));
-      }
-      setUserPosts();
+    console.log("Inside all posts UE", allPosts);
+    if (allPosts) {
+      setPosts(allPosts);
     }
-  }, [loggedInUser]);
+  }, [allPosts]);
 
-  useEffect(() => {
-    if (newPostData) {
-      setPosts((current) => [
-        { body: newPostData.postText, name: newPostData.name },
-        ...current,
-      ]);
-    }
-  }, [newPostData]);
+  const getUpdatedArticle = (updatedArticle) => {
+    getUpdatedPostData(updatedArticle);
+  };
 
-  useEffect(() => {
-    if (postsByFriends) {
-      setPosts([...currentUserPosts, ...postsByFriends]);
-    }
-  }, [postsByFriends]);
+  //Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const renderPosts = () => {
-    if (posts) {
-      const filteredPosts = posts.filter((post) => {
-        if (searchInput === "") return post;
-        else if (
-          post.body.toLowerCase().includes(searchInput.toLowerCase()) ||
-          post.name.toLowerCase().includes(searchInput.toLowerCase())
-        ) {
-          return post;
-        }
-      });
-
-      localStorage.setItem("filteredPosts", JSON.stringify(filteredPosts));
-
-      return posts
+    console.log("Render posts -> ", posts);
+    if (currentPosts) {
+      return currentPosts
         .filter((post) => {
           if (searchInput === "") return post;
           else if (
             post.body.toLowerCase().includes(searchInput.toLowerCase()) ||
-            post.name.toLowerCase().includes(searchInput.toLowerCase())
+            post.author.toLowerCase().includes(searchInput.toLowerCase())
           ) {
             return post;
           }
@@ -75,12 +54,14 @@ const Posts = ({ loggedInUser, newPostData, postsByFriends }) => {
         .map((post, idx) => {
           return (
             <Post
-              name={post.name || name}
+              id={post._id}
+              author={post.author}
+              name={post.name}
               body={post.body}
-              title={post.title}
-              img={post.img}
+              img={post.imageCloud.url}
+              comments={post.comments}
               key={idx}
-              id={post.id}
+              getUpdatedArticle={getUpdatedArticle}
             />
           );
         });
@@ -116,9 +97,15 @@ const Posts = ({ loggedInUser, newPostData, postsByFriends }) => {
             value={searchInput}
           />
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} className="margin_medium">
           {renderPosts()}
         </Grid>
+        <PaginationList
+          className="margin_medium"
+          postsPerPage={postsPerPage}
+          totalPosts={posts.length}
+          paginate={paginate}
+        />
       </Box>
     </>
   );

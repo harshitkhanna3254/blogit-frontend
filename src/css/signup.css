@@ -1,6 +1,6 @@
 .paper {
   padding: 20px;
-  height: 85vh;
+  height: 110vh;
   width: 420px;
   margin: 20px auto;
 }
@@ -19,4 +19,8 @@
 
 .margin_large {
   margin-bottom: 25px !important;
+}
+
+.text_center {
+  text-align: center;
 }

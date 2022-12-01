@@ -10,7 +10,7 @@ import {
 
 import "../css/friend.css";
 
-const Friend = ({ name, id, username, unfollowFriend }) => {
+const Friend = ({ name, username, unfollowFriend, avatar }) => {
   return (
     <>
       <Grid item xs={6}>
@@ -19,7 +19,7 @@ const Friend = ({ name, id, username, unfollowFriend }) => {
             component="img"
             alt="Default Image"
             height="140"
-            image={`https://picsum.photos/id/${id + 130}/200/300`}
+            image={avatar}
           />
           <CardContent>
             <Typography
@@ -45,7 +45,7 @@ const Friend = ({ name, id, username, unfollowFriend }) => {
               color="warning"
               data-testid="button_removeFriend"
               onClick={() => {
-                unfollowFriend(id);
+                unfollowFriend(username);
               }}
             >
               Unfollow

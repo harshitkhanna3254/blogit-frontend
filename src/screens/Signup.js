@@ -1,4 +1,6 @@
 import Navbar from "../components/Navbar";
+import axios from "axios";
+import { format } from "date-fns";
 
 import {
   Grid,
@@ -12,6 +14,7 @@ import {
   FormLabel,
   RadioGroup,
   Radio,
+  Alert,
 } from "@mui/material";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -24,25 +27,42 @@ import {
   PASSWORDS_DONT_MATCH_ERROR,
   PASSWORD_MIN_LENGTH_ERROR,
   PHONE_NUMBER_ERROR,
+  USERNAME_MIN_LENGTH_ERROR,
+  ZIPCODE_NUMBER_ERROR,
 } from "../constants/Signup";
 
 import "../css/signup.css";
 
+//Requests
+import { REGISTER_USER_REQUEST } from "../constants/Requests";
+import { useState } from "react";
+
 const Signup = () => {
   const navigate = useNavigate();
 
+  const [error409, setError409] = useState(false);
+  const [error400, setError400] = useState(false);
+
+  //alert/error booleans
+
   const formInitialValues = {
+    username: "",
     name: "",
     email: "",
+    dob: "",
     gender: "",
-    phone: "",
+    zipcode: "",
+    phoneNumber: "",
     password: "",
     confirmPassword: "",
+    avatarCloud: "",
   };
 
   const formValidationSchema = Yup.object().shape({
+    username: Yup.string().min(3, USERNAME_MIN_LENGTH_ERROR),
     name: Yup.string().min(3, NAME_MIN_LENGTH_ERROR),
-    phone: Yup.string().min(10, PHONE_NUMBER_ERROR),
+    zipcode: Yup.string().min(5, ZIPCODE_NUMBER_ERROR),
+    phoneNumber: Yup.string().min(9, PHONE_NUMBER_ERROR),
     password: Yup.string().min(4, PASSWORD_MIN_LENGTH_ERROR),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref("password")],
@@ -50,10 +70,28 @@ const Signup = () => {
     ),
   });
 
-  const submitForm = (values, props) => {
-    sessionStorage.setItem("loggedInUser", JSON.stringify(values));
-    navigate("/dashboard");
-    props.resetForm();
+  const submitForm = async (values, props) => {
+    delete values.confirmPassword;
+
+    values.dob = format(new Date(values.dob), "MM/dd/yyyy ");
+
+    console.log("data", values);
+
+    try {
+      const res = await axios.post(REGISTER_USER_REQUEST, values);
+      console.log(res);
+      props.resetForm();
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      console.log(error.response.status);
+      if (error.response.status === 409) setError409(true);
+      if (error.response.status === 400) setError400(true);
+
+      window.scrollTo(0, 0);
+    }
+
+    // sessionStorage.setItem("loggedInUser", JSON.stringify(values));
   };
 
   return (
@@ -61,6 +99,17 @@ const Signup = () => {
       <Navbar />
       <Grid container>
         <Paper className="paper" elevation={3}>
+          {error409 && (
+            <Alert severity="error" className="margin_medium text_center">
+              Username already exists
+            </Alert>
+          )}
+          {error400 && (
+            <Alert severity="error" className="margin_medium text_center">
+              Invalid Request
+            </Alert>
+          )}
+
           <Grid align="center">
             <Avatar className="avatar">
               <AddBoxIcon></AddBoxIcon>
@@ -77,6 +126,18 @@ const Signup = () => {
           >
             {(props) => (
               <Form>
+                <Field
+                  as={TextField}
+                  name="username"
+                  label="Username"
+                  placeholder="Enter Username"
+                  type="text"
+                  className="margin_medium"
+                  helperText={<ErrorMessage name="username" />}
+                  fullWidth
+                  required
+                />
+
                 <Field
                   as={TextField}
                   name="name"
@@ -99,6 +160,21 @@ const Signup = () => {
                   fullWidth
                   required
                 />
+
+                <FormGroup>
+                  <FormLabel id="demo-radio-buttons-group-label" required>
+                    Date of Birth
+                  </FormLabel>
+                  <Field
+                    as={TextField}
+                    name="dob"
+                    type="date"
+                    className="margin_medium"
+                    helperText={<ErrorMessage name="dob" />}
+                    fullWidth
+                    required
+                  />
+                </FormGroup>
 
                 <FormGroup className="margin_medium">
                   <FormLabel id="demo-radio-buttons-group-label" required>
@@ -133,10 +209,22 @@ const Signup = () => {
 
                 <Field
                   as={TextField}
-                  name="phone"
+                  name="zipcode"
+                  label="Zipcode"
+                  placeholder="Enter Zipcode"
+                  helperText={<ErrorMessage name="zipcode" />}
+                  className="margin_medium"
+                  type="number"
+                  fullWidth
+                  required
+                />
+
+                <Field
+                  as={TextField}
+                  name="phoneNumber"
                   label="Phone Number"
                   placeholder="Enter Phone Number"
-                  helperText={<ErrorMessage name="phone" />}
+                  helperText={<ErrorMessage name="phoneNumber" />}
                   className="margin_medium"
                   type="number"
                   fullWidth

@@ -1,12 +1,37 @@
 import { Typography, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { HEADLINE_REQUEST, LOGIN_REQ_OPTIONS } from "../constants/Requests";
 
 const Status = ({ name }) => {
   const [statusInput, setStatusInput] = useState("");
   const [statusValue, setStatusValue] = useState("Welcome to Blog-It");
 
-  const submitStatus = () => {
-    setStatusValue(statusInput);
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState(false);
+
+  useEffect(() => {
+    async function getHeadline() {
+      const { data } = await axios.get(HEADLINE_REQUEST, LOGIN_REQ_OPTIONS);
+
+      setStatusValue(data.headline);
+    }
+    getHeadline();
+  });
+
+  const submitStatus = async () => {
+    try {
+      const { data } = await axios.put(
+        HEADLINE_REQUEST,
+        { headline: statusInput },
+        LOGIN_REQ_OPTIONS
+      );
+      setStatusValue(data.headline);
+    } catch (error) {
+      setError(true);
+      setErrorText(error.response.data.message);
+    }
+
     setStatusInput("");
   };
 

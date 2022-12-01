@@ -1,8 +1,9 @@
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getUsers } from "../services/users";
+// import { getUsers } from "../services/users";
 import { useNavigate } from "react-router-dom";
+// import Cookies from "js-cookie";
 
 import {
   Grid,
@@ -25,21 +26,27 @@ import { PASSWORD_MIN_LENGTH_ERROR } from "../constants/Login";
 
 import LockIcon from "@mui/icons-material/Lock";
 import "../css/login.css";
+import axios from "axios";
+import {
+  LOGIN_REQ_OPTIONS,
+  LOGIN_USER_REQUEST,
+  PROFILE_REQUEST,
+} from "../constants/Requests";
 
 const Login = () => {
-  const [users, setUsers] = useState([]);
-
+  //Errors
   const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchUsers() {
-      const fetchedUsers = await getUsers();
-      setUsers(fetchedUsers);
-      sessionStorage.setItem("allUsers", JSON.stringify(fetchedUsers));
-    }
-    fetchUsers();
+    // async function fetchUsers() {
+    //   const fetchedUsers = await getUsers();
+    //   setUsers(fetchedUsers);
+    //   sessionStorage.setItem("allUsers", JSON.stringify(fetchedUsers));
+    // }
+    // fetchUsers();
   }, []);
 
   const formInitialValues = {
@@ -51,28 +58,49 @@ const Login = () => {
     password: Yup.string().min(4, PASSWORD_MIN_LENGTH_ERROR),
   });
 
-  const submitForm = ({ username, password }, props) => {
-    users.map((user) => {
-      if (username === user.username) {
-        if (password === user.address.street) {
-          sessionStorage.setItem("loggedInUser", JSON.stringify(user));
-          sessionStorage.setItem("loggedInUserIndex", JSON.stringify(user.id));
-          navigate("/dashboard");
-          return;
-        } else {
-          setError(true);
-        }
-      } else {
-        setError(true);
-      }
-    });
+  const submitForm = async ({ username, password }, props) => {
+    try {
+      const resUser = await axios.post(
+        LOGIN_USER_REQUEST,
+        { username, password },
+        LOGIN_REQ_OPTIONS
+      );
 
-    // for (let index = 0; index < users.length; index++) {
-    //   let user = users[index];
+      const resProfile = await axios.get(PROFILE_REQUEST, LOGIN_REQ_OPTIONS);
 
-    // }
+      const loggedInUser = {
+        ...resUser.data,
+        ...resProfile.data,
+      };
 
-    props.resetForm();
+      console.log(loggedInUser);
+
+      setError(false);
+      setErrorText("");
+
+      sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+      navigate("/dashboard");
+    } catch (error) {
+      setError(true);
+      setErrorText(error.response.data.message);
+    }
+
+    // users.map((user) => {
+    //   if (username === user.username) {
+    //     if (password === user.address.street) {
+    //       sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+    //       sessionStorage.setItem("loggedInUserIndex", JSON.stringify(user.id));
+    //       navigate("/dashboard");
+    //       return;
+    //     } else {
+    //       setError(true);
+    //     }
+    //   } else {
+    //     setError(true);
+    //   }
+    // });
+
+    // props.resetForm();
   };
 
   return (
@@ -80,6 +108,11 @@ const Login = () => {
       <Navbar />
       <Grid container>
         <Paper className="paper_login" elevation={3}>
+          {error && (
+            <Alert severity="error" className="margin_medium text_center">
+              {errorText}
+            </Alert>
+          )}
           <Grid align="center">
             <Avatar className="avatar margin_small">
               <LockIcon></LockIcon>

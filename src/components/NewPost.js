@@ -3,8 +3,44 @@ import { useState } from "react";
 
 const NewPost = ({ createNewPost }) => {
   const [postInput, setPostInput] = useState("");
+  const [image, setImage] = useState("");
+  const [disableSubmit, setDisableSubmit] = useState(false);
 
   const clearPost = () => {
+    setPostInput("");
+    setImage("");
+  };
+
+  const handleImageUpload = (e) => {
+    setDisableSubmit(true);
+    const file = e.target.files[0];
+    console.log(file);
+    transformFile(file);
+  };
+
+  const transformFile = (file) => {
+    const reader = new FileReader();
+
+    if (file) {
+      console.log("Converting file to _64");
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+        setDisableSubmit(false);
+      };
+    } else {
+      setImage("");
+      setDisableSubmit(false);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!postInput) {
+      setPostInput("");
+      return;
+    }
+
+    createNewPost(postInput, image);
     setPostInput("");
   };
 
@@ -27,9 +63,14 @@ const NewPost = ({ createNewPost }) => {
       </Grid>
       <Grid container spacing={4} className="post_container_2">
         <Grid item xs={4} mt={3}>
-          <Button className="width_medium" variant="outlined" component="label">
+          <Button variant="outlined" className="width_medium" component="label">
             Upload Image
-            <input type="file" hidden />
+            <input
+              type="file"
+              accept="image/"
+              onChange={handleImageUpload}
+              hidden
+            />
           </Button>
         </Grid>
         <Grid item xs={4} mt={3}>
@@ -49,10 +90,8 @@ const NewPost = ({ createNewPost }) => {
             variant="outlined"
             component="label"
             color="success"
-            onClick={() => {
-              if (postInput) createNewPost(postInput);
-              setPostInput("");
-            }}
+            disabled={disableSubmit}
+            onClick={handleSubmit}
           >
             Submit
           </Button>

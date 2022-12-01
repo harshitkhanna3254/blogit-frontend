@@ -9,6 +9,9 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+import { LOGIN_REQ_OPTIONS, LOGOUT_USER_REQUEST } from "../constants/Requests";
 
 const Navbar = () => {
   const [loggedInUser, setLoggedInUser] = useState();
@@ -17,9 +20,10 @@ const Navbar = () => {
     setLoggedInUser(sessionStorage.getItem("loggedInUser"));
   });
 
-  const logout = () => {
+  const logout = async () => {
     sessionStorage.clear();
     setLoggedInUser(null);
+    await axios.post(LOGOUT_USER_REQUEST, {}, LOGIN_REQ_OPTIONS);
   };
 
   return (
